@@ -1,0 +1,19 @@
+import text
+
+int[] integers = [-12, 0, 34]
+print.line("integers={text.join(integers, " ")}")
+print.line("no-separator={text.join(integers, "")}")
+int[] empty = []
+print.line("empty=|{text.join(empty, ",")}|")
+int[] singleton = [5]
+print.line("singleton={text.join(singleton, "--")}")
+nat64[] naturals = [0, 18446744073709551615]
+print.line("naturals={text.join(naturals, ":")}")
+bool[] flags = [true, false, true]
+print.line("bools={text.join(flags, "|")}")
+real64[] fractions = [1.5, -2.25]
+print.line("fractions={text.join(fractions, ";")}")
+string[] words = ["a", "", "b"]
+print.line("strings={text.join(words, "::")}")
+(int, string)[] pairs = [(1, "x"), (2, "y")]
+print.line("tuples={text.join(pairs, ";")}")

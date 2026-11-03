@@ -1,0 +1,55 @@
+private int | error hex_value(int byte)
+    if byte >= 48 and byte <= 57
+        return byte - 48
+    if byte >= 65 and byte <= 70
+        return byte - 55
+    if byte >= 97 and byte <= 102
+        return byte - 87
+    return error("invalid percent escape", code = "TEXT_URL_ESCAPE")
+
+string | error decode_form_component(string source)
+    nat8[] raw = nat8[](source.utf8())
+    nat8[] decoded = []
+    nat index = 0
+    while index < len(raw)
+        int byte = int(raw[index])
+        if byte == 43
+            decoded = decoded.append(nat8(32))
+        elif byte == 37
+            if index + 2 >= len(raw)
+                return error("incomplete percent escape", code = "TEXT_URL_ESCAPE")
+            int hi = try hex_value(int(raw[index + 1]))
+            int lo = try hex_value(int(raw[index + 2]))
+            decoded = decoded.append(nat8(hi * 16 + lo))
+            index += 2
+        else
+            decoded = decoded.append(raw[index])
+        index += 1
+    return string.from_utf8(bin(decoded))
+
+map<string, string[]> | error parse(string query)
+    map<string, string[]> result
+    if query == ""
+        return result
+    string source = query
+    if source[0] == "?"
+        source = source[1:]
+    for string item = source.split("&")[]
+        if item == ""
+            continue
+        string key = item
+        string value = ""
+        match item.find("=")
+            nat separator
+                key = item[:<separator]
+                value = item[(separator + 1):]
+            none
+                value = ""
+        key = try decode_form_component(key)
+        value = try decode_form_component(value)
+        match result.get(key)
+            string[] existing
+                .result.set(key, existing.append(value))
+            none
+                .result.set(key, [value])
+    return result

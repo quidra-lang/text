@@ -1,0 +1,90 @@
+bool leap_year(int year)
+    return year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)
+
+int days_in_month(int year, int month)
+    if year < 1 or year > 9999 or month < 1 or month > 12
+        return 0
+    int[] lengths = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    if month == 2 and leap_year(year)
+        return 29
+    return lengths[month - 1]
+
+bool valid(int year, int month, int day)
+    return day >= 1 and day <= days_in_month(year, month)
+
+class Date(const int year, const int month, const int day) | error
+    if not valid(year, month, day)
+        return error("invalid Gregorian calendar date", code = "TEXT_DATE")
+
+int days_before_year(int year)
+    int previous = year - 1
+    return previous * 365 + previous / 4 - previous / 100 + previous / 400
+
+int ordinal(Date date)
+    int value = days_before_year(date.year) + date.day - 1
+    for 1 <= int month < date.month
+        value += days_in_month(date.year, month)
+    return value
+
+Date | error from_ordinal(int index)
+    if index < 0 or index >= days_before_year(10000)
+        return error("date outside years 1 through 9999", code = "TEXT_DATE")
+    int lo = 1
+    int hi = 10000
+    while lo + 1 < hi
+        int middle = (lo + hi) / 2
+        if days_before_year(middle) <= index
+            lo = middle
+        else
+            hi = middle
+    int remaining = index - days_before_year(lo)
+    int month = 1
+    while remaining >= days_in_month(lo, month)
+        remaining -= days_in_month(lo, month)
+        month += 1
+    return Date(lo, month, remaining + 1)
+
+Date | error add_days(Date date, int offset)
+    return from_ordinal(ordinal(date) + offset)
+
+int days_between(Date start, Date finish)
+    return ordinal(finish) - ordinal(start)
+
+int weekday(Date date)
+    return ordinal(date) % 7
+
+string iso(Date date)
+    return "{date.year:int=4,zero}-{date.month:int=2,zero}-{date.day:int=2,zero}"
+
+Date | error parse(string source)
+    string[] parts = source.split("-")
+    if len(parts) != 3 or len(parts[0]) != 4 or len(parts[1]) != 2 or len(parts[2]) != 2
+        return error("expected YYYY-MM-DD", code = "TEXT_DATE")
+    string digits = "0123456789"
+    for string part = parts[]
+        for nat i < len(part)
+            if not digits.contains(part[i])
+                return error("expected decimal YYYY-MM-DD", code = "TEXT_DATE")
+    int year = try int.parse(parts[0])
+    int month = try int.parse(parts[1])
+    int day = try int.parse(parts[2])
+    return Date(year, month, day)
+
+string[] | error month_grid(int year, int month)
+    Date first = try Date(year, month, 1)
+    int start = (weekday(first) + 1) % 7
+    int days = days_in_month(year, month)
+    string[] rows = ["Su Mo Tu We Th Fr Sa"]
+    string line = string.repeat(" ", nat(start * 3))
+    int column = start
+    for 1 <= int day <= days
+        if day > 1 and column > 0
+            line += " "
+        line += "{day:int=2}"
+        column += 1
+        if column == 7 or day == days
+            rows = rows.append(line)
+            line = ""
+            column = 0
+    return rows
+

@@ -1,0 +1,4 @@
+name = text
+version = 0.6.0
+repository = https://github.com/quidra-lang/text
+requires.quidra = >=0.6.0 <0.7.0

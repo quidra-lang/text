@@ -1,0 +1,57 @@
+string[][] | error parse(string source)
+    string[][] records = []
+    if source == ""
+        return records
+    string[] record = []
+    string field = ""
+    bool quoted = false
+    bool after_quote = false
+    bool field_start = true
+    bool ended_record = false
+    nat index = 0
+    while index < len(source)
+        string character = source[index]
+        if quoted
+            if character == DQ
+                if index + 1 < len(source) and source[index + 1] == DQ
+                    field += DQ
+                    index += 1
+                else
+                    quoted = false
+                    after_quote = true
+            else
+                field += character
+        elif character == ","
+            record = record.append(field)
+            field = ""
+            field_start = true
+            after_quote = false
+            ended_record = false
+        elif character == NL or character == CR
+            record = record.append(field)
+            records = records.append(record)
+            record = []
+            field = ""
+            field_start = true
+            after_quote = false
+            ended_record = true
+            if character == CR and index + 1 < len(source) and source[index + 1] == NL
+                index += 1
+        elif character == DQ
+            if not field_start or after_quote
+                return error("unexpected quote in CSV field", code = "TEXT_CSV")
+            quoted = true
+            field_start = false
+            ended_record = false
+        else
+            if after_quote
+                return error("characters after closing CSV quote", code = "TEXT_CSV")
+            field += character
+            field_start = false
+            ended_record = false
+        index += 1
+    if quoted
+        return error("unterminated quoted CSV field", code = "TEXT_CSV")
+    if not ended_record
+        records = records.append(record.append(field))
+    return records

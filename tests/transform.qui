@@ -1,0 +1,45 @@
+import text
+
+void check_text(string value, string expected)
+    test.equal(value, expected)
+
+check_text("-12".pad_start(5), "  -12")
+check_text("cat".pad_end(5), "cat  ")
+check_text("猫".pad_start(3, "🙂"), "🙂🙂猫")
+check_text("猫".pad_end(3, "🙂"), "猫🙂🙂")
+check_text("".pad_start(2, "0"), "00")
+check_text("".pad_end(2, "0"), "00")
+check_text("long".pad_start(2), "long")
+check_text("long".pad_end(0), "long")
+check_text("same".pad_start(4), "same")
+check_text("same".pad_end(4), "same")
+check_text(text.pad_start("x", 3, "0"), "00x")
+check_text(text.pad_end("x", 3, "0"), "x00")
+match "x".pad_start(0, "")
+    error problem
+        test.equal(problem.code, "TEXT_PADDING")
+    string unexpected
+        test.check(false)
+match "x".pad_end(1, "ab")
+    error problem
+        test.equal(problem.code, "TEXT_PADDING")
+    string unexpected
+        test.check(false)
+
+check_text("Hello, 猫!".translate("H猫", "h犬"), "hello, 犬!")
+check_text("猫猫!".translate("猫", "a"), "aa!")
+check_text(text.translate("a", "a", "🙂"), "🙂")
+check_text("abba".translate("ab", "bc"), "bccb")
+check_text("aba".translate("aba", "xyz"), "zyz")
+check_text("unchanged".translate("", ""), "unchanged")
+check_text("".translate("a", "b"), "")
+match "abc".translate("ab", "x")
+    error problem
+        test.equal(problem.code, "TEXT_TRANSLATE")
+    string unexpected
+        test.check(false)
+match "".translate("", "x")
+    error problem
+        test.equal(problem.code, "TEXT_TRANSLATE")
+    string unexpected
+        test.check(false)

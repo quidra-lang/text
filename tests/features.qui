@@ -1,0 +1,104 @@
+import text
+
+string[] parts = text.identifier.words("HTTPServer_name")
+print.line("identifier={parts.join("|")}")
+print.line("snake={text.identifier.snake("getLastLoginTime")}")
+print.line("camel={text.identifier.camel("first-second_value")}")
+print.line("pascal={text.identifier.pascal("first_second")}")
+print.line("kebab={text.identifier.kebab("lastLoginDate")}")
+
+auto groups = text.runs("AAABAA")
+print.line("runs={len(groups)}")
+(string first, nat count) = groups[0]
+print.line("first-run={first}:{count}")
+
+auto initial = text.calendar.Date(2024, 2, 28)
+auto advanced = text.calendar.add_days(initial, 2)
+print.line("date={text.calendar.iso(advanced)}")
+print.line("weekday={text.calendar.weekday(advanced)}")
+print.line("between={text.calendar.days_between(initial, advanced)}")
+auto grid = text.calendar.month_grid(2024, 2)
+print.line("grid-header={grid[0]}")
+print.line("grid-last={grid[len(grid) - 1]}")
+match text.calendar.parse("2026-02-30")
+    text.calendar.Date invalid
+        print.line("unexpected")
+    error problem
+        print.line("date-error")
+
+auto wrapped = text.layout.wrap("a bb ccc", 7)
+print.line("wrapped={wrapped.join("|")}")
+auto justified = text.layout.justify("a bb ccc", 7)
+for string line = justified[]
+    print.line("|{line}|")
+auto spread_left = text.layout.justify("a b c xxx", 8)
+auto spread_right = text.layout.justify("a b c xxx", 8, extra_right = true)
+print.line("left=|{spread_left[0]}|")
+print.line("right=|{spread_right[0]}|")
+print.line("last=|{spread_right[1]}|")
+match text.layout.wrap("abcdefgh", 5)
+    string[] bad
+        print.line("unexpected")
+    error problem
+        print.line("width-error")
+
+auto tokens = text.lex.tokenize("x12<=5 + 3")
+print.line("tokens={tokens.join("|")}")
+text.lex.Cursor cursor = text.lex.Cursor(tokens)
+.cursor.expect("x12")
+print.line("accept={.cursor.accept("<=")}")
+match .cursor.take()
+    string value
+        print.line("taken={value}")
+    none
+        print.line("missing")
+print.line("position={cursor.offset()}")
+match text.lex.tokenize("x ~ y")
+    string[] unexpected
+        print.line("unexpected")
+    error problem
+        print.line("lex-error")
+
+bool is_sign(string token)
+    return token == "+" or token == "-"
+
+text.lex.Cursor combinator = text.lex.Cursor(["+", "-", "name", "="])
+print.line("sequence-rejected={.combinator.accept_sequence(["+", "="])}")
+print.line("sequence-offset={combinator.offset()}")
+string[] signs = .combinator.take_while(is_sign)
+print.line("repeated={signs.join("|")}")
+print.line("choice={.combinator.accept_any(["name", "other"])}")
+print.line("sequence-accepted={.combinator.accept_sequence(["="])}")
+print.line("combinator-done={combinator.done()}")
+
+int number = 255
+print.line("radix-bin={text.base_string(number, base = 2)}")
+print.line("radix-oct={number.base_string(base = 8)}")
+print.line("radix-hex={text.base_string(number, base = 16, uppercase = true)}")
+print.line("radix-negative={text.base_string(-255, base = 16, uppercase = true)}")
+match text.base_string(number, base = 1)
+    string unexpected
+        print.line("unexpected")
+    error problem
+        print.line("base-error")
+
+text.Cursor input("12W0猫")
+nat repeat_count = .input.take_nat()
+string character = .input.take_char()
+print.line("prefix={repeat_count}:{character}:{input.offset()}")
+repeat_count = .input.take_nat()
+character = .input.take_char()
+print.line("unicode={repeat_count}:{character}:{input.offset()}")
+match .input.take_char()
+    string unexpected
+        print.line("unexpected={unexpected}")
+    error failure
+        print.line("cursor-end={failure.code}")
+text.Cursor invalid_prefix("W")
+match .invalid_prefix.take_nat()
+    nat unexpected
+        print.line("unexpected={unexpected}")
+    error failure
+        print.line("cursor-invalid={failure.code}:{invalid_prefix.offset()}")
+string[] characters = text.characters("a猫")
+print.line("characters={characters.join("|")}:{len(text.characters(""))}")
