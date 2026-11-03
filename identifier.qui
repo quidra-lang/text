@@ -1,22 +1,22 @@
 string[] | error words(string source)
-    string upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    string lower = "abcdefghijklmnopqrstuvwxyz"
-    string digits = "0123456789"
-    string[] result = []
-    string current = ""
+    string upper := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    string lower := "abcdefghijklmnopqrstuvwxyz"
+    string digits := "0123456789"
+    string[] result := []
+    string current := ""
     for nat i < len(source)
-        string character = source[i]
+        string character := source[i]
         if character == "_" or character == "-"
             if current != ""
                 result = result.append(current)
                 current = ""
             continue
-        bool uppercase = upper.contains(character)
+        bool uppercase := upper.contains(character)
         if not uppercase and not lower.contains(character) and not digits.contains(character)
             return error("identifier contains a non-ASCII identifier character", code = "TEXT_IDENTIFIER")
         if uppercase and current != ""
-            string previous = source[i - 1]
-            bool boundary = lower.contains(previous) or digits.contains(previous)
+            string previous := source[i - 1]
+            bool boundary := lower.contains(previous) or digits.contains(previous)
             if not boundary and i + 1 < len(source)
                 boundary = upper.contains(previous) and lower.contains(source[i + 1])
             if boundary
@@ -28,25 +28,25 @@ string[] | error words(string source)
     return result
 
 string | error snake(string source)
-    string[] parts = try words(source)
+    string[] parts := try words(source)
     return parts.join("_")
 
 string | error kebab(string source)
-    string[] parts = try words(source)
+    string[] parts := try words(source)
     return parts.join("-")
 
 string | error pascal(string source)
-    string[] parts = try words(source)
-    string result = ""
-    for string part = parts[]
+    string[] parts := try words(source)
+    string result := ""
+    for string part := parts[]
         result += part[0].upper_ascii() + part[1:]
     return result
 
 string | error camel(string source)
-    string[] parts = try words(source)
+    string[] parts := try words(source)
     if len(parts) == 0
         return ""
-    string result = parts[0]
+    string result := parts[0]
     for 1 <= nat i < len(parts)
         result += parts[i][0].upper_ascii() + parts[i][1:]
     return result

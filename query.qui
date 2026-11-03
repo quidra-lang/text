@@ -8,18 +8,18 @@ private int | error hex_value(int byte)
     return error("invalid percent escape", code = "TEXT_URL_ESCAPE")
 
 string | error decode_form_component(string source)
-    nat8[] raw = nat8[](source.utf8())
-    nat8[] decoded = []
-    nat index = 0
+    nat8[] raw := nat8[](source.utf8())
+    nat8[] decoded := []
+    nat index := 0
     while index < len(raw)
-        int byte = int(raw[index])
+        int byte := int(raw[index])
         if byte == 43
             decoded = decoded.append(nat8(32))
         elif byte == 37
             if index + 2 >= len(raw)
                 return error("incomplete percent escape", code = "TEXT_URL_ESCAPE")
-            int hi = try hex_value(int(raw[index + 1]))
-            int lo = try hex_value(int(raw[index + 2]))
+            int hi := try hex_value(int(raw[index + 1]))
+            int lo := try hex_value(int(raw[index + 2]))
             decoded = decoded.append(nat8(hi * 16 + lo))
             index += 2
         else
@@ -31,14 +31,14 @@ map<string, string[]> | error parse(string query)
     map<string, string[]> result
     if query == ""
         return result
-    string source = query
+    string source := query
     if source[0] == "?"
         source = source[1:]
-    for string item = source.split("&")[]
+    for string item := source.split("&")[]
         if item == ""
             continue
-        string key = item
-        string value = ""
+        string key := item
+        string value := ""
         match item.find("=")
             nat separator
                 key = item[:<separator]

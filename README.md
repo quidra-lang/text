@@ -5,7 +5,7 @@
 ```quidra
 import text
 
-int[] values = [-12, 0, 34]
+int[] values := [-12, 0, 34]
 print.line(text.join(values, " "))
 ```
 
@@ -23,8 +23,8 @@ quidra install quidra-text
 
 ```quidra
 import text
-string greeting = text.lower_ascii("HELLO")
-auto parts = "name=value=more".split_once("=")
+string greeting := text.lower_ascii("HELLO")
+parts := "name=value=more".split_once("=")
 ```
 
 `lower_ascii` and `upper_ascii` are non-mutating string methods in current Core, also exposed as capture-free extension functions by this package; ASCII `A-Z` / `a-z` are mapped while every other Unicode scalar is left unchanged. `split_once(separator)` returns `(string, string) | none`, splitting at only the first occurrence; an empty separator fails with `TEXT_SPLIT`. `split_once` is currently a `text` extension method rather than a Core built-in.
@@ -33,7 +33,7 @@ auto parts = "name=value=more".split_once("=")
 
 ```quidra
 import text
-string[] words = text.ascii_words("Apple, banana APPLE", ignore_case = true)
+string[] words := text.ascii_words("Apple, banana APPLE", ignore_case = true)
 ```
 
 `ascii_words` selects maximal consecutive ASCII `A-Z`/`a-z` runs, returning words in source order. `ignore_case` converts ASCII uppercase to lowercase; all other characters delimit words. It does not implement Unicode segmentation or language-specific tokenization.
@@ -42,7 +42,7 @@ string[] words = text.ascii_words("Apple, banana APPLE", ignore_case = true)
 
 ```quidra
 import text
-auto rows = text.csv.parse("name,note{NL}Aki,{DQ}hello, world{DQ}{NL}")
+rows := text.csv.parse("name,note{NL}Aki,{DQ}hello, world{DQ}{NL}")
 ```
 
 `csv.parse(string) -> string[][] | error` supports quoted fields, doubled quotes, empty cells, embedded CR/LF, CRLF line endings and a final line without a newline. It rejects bare quotes, characters after a closing quote, and unterminated quotes. All fields remain strings; it performs no implicit numeric conversion. Empty input yields zero rows.
@@ -51,7 +51,7 @@ auto rows = text.csv.parse("name,note{NL}Aki,{DQ}hello, world{DQ}{NL}")
 
 ```quidra
 import text
-auto params = text.url.query.parse("tag=C%2B%2B&tag=AI+ML")
+params := text.url.query.parse("tag=C%2B%2B&tag=AI+ML")
 ```
 
 `text.url.query.parse` accepts raw query text (optionally beginning with `?`) and returns `map<string, string[]> | error`. Map values retain duplicate-key values in occurrence order, and `keys()` lists keys in first-seen order. Use `get(key)` to read `string[] | none`. `+` is decoded as a space, `%HH` is decoded as a byte, and UTF-8 validity is checked only after all percent decoding; malformed escapes are errors. Values missing `=` become empty strings; empty `&` segments are skipped. This is application/x-www-form-urlencoded style parsing, not a general URI parser.
@@ -64,8 +64,8 @@ Run `bash tests/integration.sh /path/to/quidra` against the matching Core compil
 
 ```quidra
 import text
-string[] words = text.identifier.words("HTTPServer_name")
-string formatted = text.identifier.snake("getLastLoginTime")
+string[] words := text.identifier.words("HTTPServer_name")
+string formatted := text.identifier.snake("getLastLoginTime")
 ```
 
 `identifier.words(string) -> string[] | error` recognizes ASCII letters/digits, `_` and `-`. It splits on separators, lower-to-upper boundaries, digit-to-upper boundaries, and acronym-to-word boundaries (e.g. HTTPServer becomes http, server). Output words are lowercase. Empty separators are ignored; invalid characters return `TEXT_IDENTIFIER`. `snake`, `kebab`, `camel` and `pascal` use the same segmentation.
@@ -75,9 +75,9 @@ string formatted = text.identifier.snake("getLastLoginTime")
 ```quidra
 import text
 
-text.Cursor input("12W")
-nat count = .input.take_nat()
-string character = .input.take_char()
+text.Cursor input := text.Cursor("12W")
+nat count := .input.take_nat()
+string character := .input.take_char()
 ```
 
 `text.Cursor(source)` reads from an immutable string. `offset()` counts consumed Unicode code points and `done()` tests for end of input. `.take_nat()` consumes the maximal consecutive ASCII digit prefix at the current offset and parses it as `nat`. `.take_char()` consumes one Unicode code point as a string. Both return `error` on failure and leave the offset unchanged. Missing input reports `TEXT_CURSOR`, while numeric parsing errors retain the underlying diagnostic.
@@ -89,18 +89,18 @@ string character = .input.take_char()
 ```quidra
 import text
 
-string field = "-12".pad_start(5)
-string label = "cat".pad_end(5, ".")
+string field := "-12".pad_start(5)
+string label := "cat".pad_end(5, ".")
 ```
 
-`pad_start(extend string source, nat width, string fill = " ") -> string | error` and `pad_end` add the fill character before or after the source until it contains at least `width` Unicode code points. Existing text is never truncated, and a sign counts as part of the source width: `"-12".pad_start(5)` is `"  -12"`. The fill must contain exactly one Unicode code point, even when no padding is required; otherwise the functions return `TEXT_PADDING`. Width zero and empty source are valid. The functions preserve the source value. This is code-point width, not grapheme or terminal display-cell width.
+`pad_start(extend string source, nat width, string fill := " ") -> string | error` and `pad_end` add the fill character before or after the source until it contains at least `width` Unicode code points. Existing text is never truncated, and a sign counts as part of the source width: `"-12".pad_start(5)` is `"  -12"`. The fill must contain exactly one Unicode code point, even when no padding is required; otherwise the functions return `TEXT_PADDING`. Width zero and empty source are valid. The functions preserve the source value. This is code-point width, not grapheme or terminal display-cell width.
 
 ## Translating character alphabets
 
 ```quidra
 import text
 
-string normalized = "Hello, 猫!".translate("H猫", "h犬")
+string normalized := "Hello, 猫!".translate("H猫", "h犬")
 ```
 
 `translate(extend string source, string original, string replacement) -> string | error` maps each code point in `original` to the code point at the same position in `replacement`, leaving unmatched characters unchanged. Both alphabets must have the same code-point length, including when the source is empty; unequal lengths return `TEXT_TRANSLATE`. An empty alphabet leaves the source unchanged. Repeated characters in `original` use their last mapping. Translation is simultaneous: a replacement is not translated again. The source remains unchanged. This operation maps individual Unicode code points; it performs no case folding, normalization, deletion or expansion.
@@ -112,8 +112,8 @@ string normalized = "Hello, 猫!".translate("H猫", "h犬")
 ## Gregorian civil dates
 
 ```quidra
-auto today = text.calendar.Date(2024, 2, 28)
-auto later = text.calendar.add_days(today, 2)
+today := text.calendar.Date(2024, 2, 28)
+later := text.calendar.add_days(today, 2)
 print.line(text.calendar.iso(later))
 ```
 
@@ -123,13 +123,13 @@ The three Date fields are immutable after construction, so later field writes ca
 
 ## ASCII word wrapping and justification
 
-`text.layout.wrap(source,width) -> string[] | error` word-wraps space-separated printable ASCII text without losing punctuation, collapsing repeated spaces. `text.layout.justify` distributes spaces across non-final lines and pads final/single-word lines to the requested width. `justify(source, width, extra_right = false)` assigns remainder spaces to the leftmost gaps by default; `extra_right = true` assigns them to the rightmost gaps on nonfinal, multiword lines only. Final and single-word lines remain right-padded. Both functions require a positive width and reject unsupported controls, non-ASCII text and overlong words with `TEXT_LAYOUT`. Rendering width is ASCII character width, not Unicode display-cell width.
+`text.layout.wrap(source,width) -> string[] | error` word-wraps space-separated printable ASCII text without losing punctuation, collapsing repeated spaces. `text.layout.justify` distributes spaces across non-final lines and pads final/single-word lines to the requested width. `justify(string source, int width, bool extra_right := false)` assigns remainder spaces to the leftmost gaps by default; `extra_right = true` assigns them to the rightmost gaps on nonfinal, multiword lines only. Final and single-word lines remain right-padded. Both functions require a positive width and reject unsupported controls, non-ASCII text and overlong words with `TEXT_LAYOUT`. Rendering width is ASCII character width, not Unicode display-cell width.
 
 ## Lexer and cursor primitives
 
 ```quidra
-auto tokens = text.lex.tokenize("x12<=5 + 3")
-text.lex.Cursor cursor = text.lex.Cursor(tokens)
+tokens := text.lex.tokenize("x12<=5 + 3")
+text.lex.Cursor cursor := text.lex.Cursor(tokens)
 .cursor.expect("x12")
 ```
 
@@ -139,5 +139,5 @@ text.lex.Cursor cursor = text.lex.Cursor(tokens)
 
 ## Integer radix formatting
 
-`text.base_string(extend int value, base=10, uppercase=false) -> string | error` converts arbitrary-precision signed integers in bases 2..36. It is also usable as `value.base_string(base=16)` when Text is imported. Negative integers have a leading minus sign, zero is `0`, and `uppercase=true` uses A-Z for digits 10..35. Invalid bases return `TEXT_BASE`. Core also provides `value.string(base = 16, uppercase = true)` for integer values, with compile-time literal formatting arguments. Text's `base_string` instead accepts a run-time integer `base` (2..36) and an `int` receiver, returning a checked `TEXT_BASE` error for invalid bases. Other integer widths require explicit conversion to `int`; neither API adds prefixes or performs implicit conversions.
+`text.base_string(extend int value, int base := 10, bool uppercase := false) -> string | error` converts arbitrary-precision signed integers in bases 2..36. It is also usable as `value.base_string(base=16)` when Text is imported. Negative integers have a leading minus sign, zero is `0`, and `uppercase=true` uses A-Z for digits 10..35. Invalid bases return `TEXT_BASE`. Core also provides `value.string(base = 16, uppercase = true)` for integer values, with compile-time literal formatting arguments. Text's `base_string` instead accepts a run-time integer `base` (2..36) and an `int` receiver, returning a checked `TEXT_BASE` error for invalid bases. Other integer widths require explicit conversion to `int`; neither API adds prefixes or performs implicit conversions.
 

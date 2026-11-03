@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: quidra-lang/quidra
-          ref: 50f458dbb5e830c445fc55262a5ffea9e51a2105
+          ref: 8b082468b28acf32fd0dd0f5f649934274c94d08
           path: core
       - run: sudo apt-get update && sudo apt-get install -y llvm clang cmake libcurl4-openssl-dev ccache
       - uses: actions/cache/restore@v4

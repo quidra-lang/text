@@ -12,7 +12,7 @@ string upper_ascii(string source)
     return source.upper_ascii()
 
 string join<T>(T[] values, string separator)
-    string result = ""
+    string result := ""
     for nat i < len(values)
         if i > 0
             result += separator
@@ -22,14 +22,14 @@ string join<T>(T[] values, string separator)
 private string | error padding(string source, nat width, string fill)
     if len(fill) != 1
         return error("padding fill must contain exactly one Unicode code point", code = "TEXT_PADDING")
-    nat source_width = len(source)
-    nat count = if width > source_width then width - source_width else 0
+    nat source_width := len(source)
+    nat count := if width > source_width then width - source_width else 0
     return string.repeat(fill, count)
 
-string | error pad_start(extend string source, nat width, string fill = " ")
+string | error pad_start(extend string source, nat width, string fill := " ")
     return (try padding(source, width, fill)) + source
 
-string | error pad_end(extend string source, nat width, string fill = " ")
+string | error pad_end(extend string source, nat width, string fill := " ")
     return source + (try padding(source, width, fill))
 
 string | error translate(extend string source, string original, string replacement)
@@ -38,9 +38,9 @@ string | error translate(extend string source, string original, string replaceme
     map<string, string> mapping
     for nat i < len(original)
         .mapping.set(original[i], replacement[i])
-    string result = ""
+    string result := ""
     for nat i < len(source)
-        string character = source[i]
+        string character := source[i]
         match mapping.get(character)
             string mapped
                 result += mapped
@@ -57,14 +57,14 @@ string | error translate(extend string source, string original, string replaceme
         none
             return none
 
-string[] ascii_words(string source, bool ignore_case = false)
-    string[] words = []
-    string current = ""
-    string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    string lowercase = "abcdefghijklmnopqrstuvwxyz"
+string[] ascii_words(string source, bool ignore_case := false)
+    string[] words := []
+    string current := ""
+    string uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    string lowercase := "abcdefghijklmnopqrstuvwxyz"
     for nat index < len(source)
-        string character = source[index]
-        bool upper = uppercase.contains(character)
+        string character := source[index]
+        bool upper := uppercase.contains(character)
         if upper and ignore_case
             character = character.lower_ascii()
         if upper or lowercase.contains(character)
@@ -77,11 +77,11 @@ string[] ascii_words(string source, bool ignore_case = false)
     return words
 
 (string, nat)[] runs(string source)
-    (string, nat)[] result = []
+    (string, nat)[] result := []
     if len(source) == 0
         return result
-    string current = source[0]
-    nat count = 1
+    string current := source[0]
+    nat count := 1
     for 1 <= nat i < len(source)
         if source[i] == current
             count += 1
@@ -92,17 +92,17 @@ string[] ascii_words(string source, bool ignore_case = false)
     return result.append((current, count))
 
 
-string | error base_string(extend int value, int base = 10, bool uppercase = false)
+string | error base_string(extend int value, int base := 10, bool uppercase := false)
     if base < 2 or base > 36
         return error("base must be between 2 and 36", code = "TEXT_BASE")
     if value == 0
         return "0"
-    bool negative = value < 0
-    int remaining = if negative then -value else value
-    string alphabet = if uppercase then "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" else "0123456789abcdefghijklmnopqrstuvwxyz"
-    string result = ""
+    bool negative := value < 0
+    int remaining := if negative then -value else value
+    string alphabet := if uppercase then "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" else "0123456789abcdefghijklmnopqrstuvwxyz"
+    string result := ""
     while remaining > 0
-        int digit = remaining % base
+        int digit := remaining % base
         result = alphabet[digit] + result
         remaining /= base
     if negative
@@ -110,7 +110,7 @@ string | error base_string(extend int value, int base = 10, bool uppercase = fal
     return result
 
 class Cursor(const string source)
-    private nat position = 0
+    private nat position := 0
 
     nat offset()
         return position
@@ -121,12 +121,12 @@ class Cursor(const string source)
     string | error .take_char()
         if done()
             return error("expected a character at the end of input", code = "TEXT_CURSOR")
-        string value = source[position]
+        string value := source[position]
         position += 1
         return value
 
     nat | error .take_nat()
-        nat end = position
+        nat end := position
         while end < len(source) and "0123456789".contains(source[end])
             end += 1
         if end == position
@@ -139,7 +139,7 @@ class Cursor(const string source)
                 return failure
 
 string[] characters(extend string source)
-    string[] result = []
+    string[] result := []
     for nat i < len(source)
         result = result.append(source[i])
     return result

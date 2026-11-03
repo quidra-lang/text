@@ -81,8 +81,8 @@ printf 'Checking Text padding and translation\n' >&2
 cat > "$TMP/unprintable-join.qui" <<'QUI'
 import text
 class Record(int value)
-Record[] records = [Record(1)]
-string rendered = text.join(records, ",")
+Record[] records := [Record(1)]
+string rendered := text.join(records, ",")
 QUI
 if "$QUIDRA" check "$TMP/unprintable-join.qui" > "$TMP/join-type-error" 2>&1; then
     echo "Text join unexpectedly accepted unprintable records" >&2
@@ -92,7 +92,7 @@ grep -Eqi 'print|interpol|format' "$TMP/join-type-error"
 
 cat > "$TMP/mutate-date.qui" <<'QUI'
 import text
-auto date = text.calendar.Date(2024, 2, 28)
+date := text.calendar.Date(2024, 2, 28)
 date.month = 13
 QUI
 if "$QUIDRA" check "$TMP/mutate-date.qui" > "$TMP/date-error" 2>&1; then
@@ -102,7 +102,7 @@ fi
 grep -Eqi 'const|read.only|immutable' "$TMP/date-error"
 cat > "$TMP/mutate-cursor.qui" <<'QUI'
 import text
-auto cursor = text.lex.Cursor(["x"])
+cursor := text.lex.Cursor(["x"])
 .cursor.take()
 cursor.tokens = []
 QUI

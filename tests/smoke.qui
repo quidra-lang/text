@@ -13,14 +13,14 @@ match "no delimiter".split_once("=")
     none
         print.line("no-match")
 
-string[] words = text.ascii_words("Apple, banana APPLE!", ignore_case = true)
+string[] words := text.ascii_words("Apple, banana APPLE!", ignore_case = true)
 print.line("{words.join("|")}")
 
-string csv_input = "name,note{NL}Aki,{DQ}a,b{DQ}{NL}"
-auto rows = text.csv.parse(csv_input)
+string csv_input := "name,note{NL}Aki,{DQ}a,b{DQ}{NL}"
+rows := text.csv.parse(csv_input)
 print.line("{rows[1][0]}:{rows[1][1]}")
 
-auto parameters = text.url.query.parse("tag=C%2B%2B&tag=AI+ML&empty=&flag")
+parameters := text.url.query.parse("tag=C%2B%2B&tag=AI+ML&empty=&flag")
 match parameters.get("tag")
     string[] tags
         print.line("{tags.join("|")}")
@@ -42,7 +42,7 @@ match text.url.query.parse("a=%ZZ")
     error problem
         print.line("url-error")
 
-auto extras = text.url.query.parse("?a=1&&a=2&")
+extras := text.url.query.parse("?a=1&&a=2&")
 match extras.get("a")
     string[] values
         print.line(extras.keys() == ["a"] and values == ["1", "2"])
