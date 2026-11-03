@@ -1,8 +1,8 @@
 private void | error validate(string source, int width)
     if width <= 0
         return error("layout width must be positive", code = "TEXT_LAYOUT")
-    int[] codes := source.codepoints()
-    for int code := codes[]
+    codes := source.codepoints()
+    for code := codes[]
         if code < 32 or code > 126
             return error("layout accepts printable ASCII and spaces", code = "TEXT_LAYOUT")
     return void
@@ -10,8 +10,8 @@ private void | error validate(string source, int width)
 string[] | error wrap(string source, int width)
     try validate(source, width)
     string[] lines := []
-    string current := ""
-    for string word := source.split(" ")[]
+    current := ""
+    for word := source.split(" ")[]
         if word == ""
             continue
         if int(len(word)) > width
@@ -28,25 +28,25 @@ string[] | error wrap(string source, int width)
     return lines
 
 string[] | error justify(string source, int width, bool extra_right := false)
-    string[] lines := try wrap(source, width)
+    lines := try wrap(source, width)
     string[] result := []
     for nat index < len(lines)
-        string[] words := lines[index].split(" ")
-        string line := ""
+        words := lines[index].split(" ")
+        line := ""
         if index + 1 == len(lines) or len(words) == 1 or lines[index] == ""
             line = lines[index]
             line += string.repeat(" ", nat(width - int(len(line))))
         else
             int letters := 0
-            for string word := words[]
+            for word := words[]
                 letters += int(len(word))
-            int gaps := int(len(words)) - 1
-            int base := (width - letters) / gaps
-            int extra := (width - letters) % gaps
+            gaps := int(len(words)) - 1
+            base := (width - letters) / gaps
+            extra := (width - letters) % gaps
             for nat i < len(words)
                 if i > 0
-                    bool award_extra := if extra_right then int(i) > gaps - extra else int(i) <= extra
-                    int blanks := base + (if award_extra then 1 else 0)
+                    award_extra := if extra_right then int(i) > gaps - extra else int(i) <= extra
+                    blanks := base + (if award_extra then 1 else 0)
                     line += string.repeat(" ", nat(blanks))
                 line += words[i]
         result = result.append(line)

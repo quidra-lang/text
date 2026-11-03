@@ -17,11 +17,11 @@ class Date(const int year, const int month, const int day) | error
         return error("invalid Gregorian calendar date", code = "TEXT_DATE")
 
 int days_before_year(int year)
-    int previous := year - 1
+    previous := year - 1
     return previous * 365 + previous / 4 - previous / 100 + previous / 400
 
 int ordinal(Date date)
-    int value := days_before_year(date.year) + date.day - 1
+    value := days_before_year(date.year) + date.day - 1
     for 1 <= int month < date.month
         value += days_in_month(date.year, month)
     return value
@@ -32,12 +32,12 @@ Date | error from_ordinal(int index)
     int lo := 1
     int hi := 10000
     while lo + 1 < hi
-        int middle := (lo + hi) / 2
+        middle := (lo + hi) / 2
         if days_before_year(middle) <= index
             lo = middle
         else
             hi = middle
-    int remaining := index - days_before_year(lo)
+    remaining := index - days_before_year(lo)
     int month := 1
     while remaining >= days_in_month(lo, month)
         remaining -= days_in_month(lo, month)
@@ -57,26 +57,26 @@ string iso(Date date)
     return "{date.year:int=4,zero}-{date.month:int=2,zero}-{date.day:int=2,zero}"
 
 Date | error parse(string source)
-    string[] parts := source.split("-")
+    parts := source.split("-")
     if len(parts) != 3 or len(parts[0]) != 4 or len(parts[1]) != 2 or len(parts[2]) != 2
         return error("expected YYYY-MM-DD", code = "TEXT_DATE")
-    string digits := "0123456789"
-    for string part := parts[]
+    digits := "0123456789"
+    for part := parts[]
         for nat i < len(part)
             if not digits.contains(part[i])
                 return error("expected decimal YYYY-MM-DD", code = "TEXT_DATE")
-    int year := try int.parse(parts[0])
-    int month := try int.parse(parts[1])
-    int day := try int.parse(parts[2])
+    year := try int.parse(parts[0])
+    month := try int.parse(parts[1])
+    day := try int.parse(parts[2])
     return Date(year, month, day)
 
 string[] | error month_grid(int year, int month)
-    Date first := try Date(year, month, 1)
-    int start := (weekday(first) + 1) % 7
-    int days := days_in_month(year, month)
-    string[] rows := ["Su Mo Tu We Th Fr Sa"]
-    string line := string.repeat(" ", nat(start * 3))
-    int column := start
+    first := try Date(year, month, 1)
+    start := (weekday(first) + 1) % 7
+    days := days_in_month(year, month)
+    rows := ["Su Mo Tu We Th Fr Sa"]
+    line := string.repeat(" ", nat(start * 3))
+    column := start
     for 1 <= int day <= days
         if day > 1 and column > 0
             line += " "

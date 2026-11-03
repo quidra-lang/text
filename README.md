@@ -23,7 +23,7 @@ quidra install quidra-text
 
 ```quidra
 import text
-string greeting := text.lower_ascii("HELLO")
+greeting := text.lower_ascii("HELLO")
 parts := "name=value=more".split_once("=")
 ```
 
@@ -33,7 +33,7 @@ parts := "name=value=more".split_once("=")
 
 ```quidra
 import text
-string[] words := text.ascii_words("Apple, banana APPLE", ignore_case = true)
+words := text.ascii_words("Apple, banana APPLE", ignore_case = true)
 ```
 
 `ascii_words` selects maximal consecutive ASCII `A-Z`/`a-z` runs, returning words in source order. `ignore_case` converts ASCII uppercase to lowercase; all other characters delimit words. It does not implement Unicode segmentation or language-specific tokenization.
@@ -64,8 +64,8 @@ Run `bash tests/integration.sh /path/to/quidra` against the matching Core compil
 
 ```quidra
 import text
-string[] words := text.identifier.words("HTTPServer_name")
-string formatted := text.identifier.snake("getLastLoginTime")
+words := text.identifier.words("HTTPServer_name")
+formatted := text.identifier.snake("getLastLoginTime")
 ```
 
 `identifier.words(string) -> string[] | error` recognizes ASCII letters/digits, `_` and `-`. It splits on separators, lower-to-upper boundaries, digit-to-upper boundaries, and acronym-to-word boundaries (e.g. HTTPServer becomes http, server). Output words are lowercase. Empty separators are ignored; invalid characters return `TEXT_IDENTIFIER`. `snake`, `kebab`, `camel` and `pascal` use the same segmentation.
@@ -75,9 +75,9 @@ string formatted := text.identifier.snake("getLastLoginTime")
 ```quidra
 import text
 
-text.Cursor input := text.Cursor("12W")
-nat count := .input.take_nat()
-string character := .input.take_char()
+input := text.Cursor("12W")
+count := .input.take_nat()
+character := .input.take_char()
 ```
 
 `text.Cursor(source)` reads from an immutable string. `offset()` counts consumed Unicode code points and `done()` tests for end of input. `.take_nat()` consumes the maximal consecutive ASCII digit prefix at the current offset and parses it as `nat`. `.take_char()` consumes one Unicode code point as a string. Both return `error` on failure and leave the offset unchanged. Missing input reports `TEXT_CURSOR`, while numeric parsing errors retain the underlying diagnostic.
@@ -89,8 +89,8 @@ string character := .input.take_char()
 ```quidra
 import text
 
-string field := "-12".pad_start(5)
-string label := "cat".pad_end(5, ".")
+field := "-12".pad_start(5)
+label := "cat".pad_end(5, ".")
 ```
 
 `pad_start(extend string source, nat width, string fill := " ") -> string | error` and `pad_end` add the fill character before or after the source until it contains at least `width` Unicode code points. Existing text is never truncated, and a sign counts as part of the source width: `"-12".pad_start(5)` is `"  -12"`. The fill must contain exactly one Unicode code point, even when no padding is required; otherwise the functions return `TEXT_PADDING`. Width zero and empty source are valid. The functions preserve the source value. This is code-point width, not grapheme or terminal display-cell width.
@@ -100,7 +100,7 @@ string label := "cat".pad_end(5, ".")
 ```quidra
 import text
 
-string normalized := "Hello, 猫!".translate("H猫", "h犬")
+normalized := "Hello, 猫!".translate("H猫", "h犬")
 ```
 
 `translate(extend string source, string original, string replacement) -> string | error` maps each code point in `original` to the code point at the same position in `replacement`, leaving unmatched characters unchanged. Both alphabets must have the same code-point length, including when the source is empty; unequal lengths return `TEXT_TRANSLATE`. An empty alphabet leaves the source unchanged. Repeated characters in `original` use their last mapping. Translation is simultaneous: a replacement is not translated again. The source remains unchanged. This operation maps individual Unicode code points; it performs no case folding, normalization, deletion or expansion.
@@ -129,7 +129,7 @@ The three Date fields are immutable after construction, so later field writes ca
 
 ```quidra
 tokens := text.lex.tokenize("x12<=5 + 3")
-text.lex.Cursor cursor := text.lex.Cursor(tokens)
+cursor := text.lex.Cursor(tokens)
 .cursor.expect("x12")
 ```
 

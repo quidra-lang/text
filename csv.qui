@@ -3,14 +3,14 @@ string[][] | error parse(string source)
     if source == ""
         return records
     string[] record := []
-    string field := ""
-    bool quoted := false
-    bool after_quote := false
-    bool field_start := true
-    bool ended_record := false
+    field := ""
+    quoted := false
+    after_quote := false
+    field_start := true
+    ended_record := false
     nat index := 0
     while index < len(source)
-        string character := source[index]
+        character := source[index]
         if quoted
             if character == DQ
                 if index + 1 < len(source) and source[index + 1] == DQ

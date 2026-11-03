@@ -12,7 +12,7 @@ string upper_ascii(string source)
     return source.upper_ascii()
 
 string join<T>(T[] values, string separator)
-    string result := ""
+    result := ""
     for nat i < len(values)
         if i > 0
             result += separator
@@ -22,8 +22,8 @@ string join<T>(T[] values, string separator)
 private string | error padding(string source, nat width, string fill)
     if len(fill) != 1
         return error("padding fill must contain exactly one Unicode code point", code = "TEXT_PADDING")
-    nat source_width := len(source)
-    nat count := if width > source_width then width - source_width else 0
+    source_width := len(source)
+    count := if width > source_width then width - source_width else 0
     return string.repeat(fill, count)
 
 string | error pad_start(extend string source, nat width, string fill := " ")
@@ -38,9 +38,9 @@ string | error translate(extend string source, string original, string replaceme
     map<string, string> mapping
     for nat i < len(original)
         .mapping.set(original[i], replacement[i])
-    string result := ""
+    result := ""
     for nat i < len(source)
-        string character := source[i]
+        character := source[i]
         match mapping.get(character)
             string mapped
                 result += mapped
@@ -59,12 +59,12 @@ string | error translate(extend string source, string original, string replaceme
 
 string[] ascii_words(string source, bool ignore_case := false)
     string[] words := []
-    string current := ""
-    string uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    string lowercase := "abcdefghijklmnopqrstuvwxyz"
+    current := ""
+    uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    lowercase := "abcdefghijklmnopqrstuvwxyz"
     for nat index < len(source)
-        string character := source[index]
-        bool upper := uppercase.contains(character)
+        character := source[index]
+        upper := uppercase.contains(character)
         if upper and ignore_case
             character = character.lower_ascii()
         if upper or lowercase.contains(character)
@@ -80,7 +80,7 @@ string[] ascii_words(string source, bool ignore_case := false)
     (string, nat)[] result := []
     if len(source) == 0
         return result
-    string current := source[0]
+    current := source[0]
     nat count := 1
     for 1 <= nat i < len(source)
         if source[i] == current
@@ -97,12 +97,12 @@ string | error base_string(extend int value, int base := 10, bool uppercase := f
         return error("base must be between 2 and 36", code = "TEXT_BASE")
     if value == 0
         return "0"
-    bool negative := value < 0
-    int remaining := if negative then -value else value
-    string alphabet := if uppercase then "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" else "0123456789abcdefghijklmnopqrstuvwxyz"
-    string result := ""
+    negative := value < 0
+    remaining := if negative then -value else value
+    alphabet := if uppercase then "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" else "0123456789abcdefghijklmnopqrstuvwxyz"
+    result := ""
     while remaining > 0
-        int digit := remaining % base
+        digit := remaining % base
         result = alphabet[digit] + result
         remaining /= base
     if negative
@@ -121,12 +121,12 @@ class Cursor(const string source)
     string | error .take_char()
         if done()
             return error("expected a character at the end of input", code = "TEXT_CURSOR")
-        string value := source[position]
+        value := source[position]
         position += 1
         return value
 
     nat | error .take_nat()
-        nat end := position
+        end := position
         while end < len(source) and "0123456789".contains(source[end])
             end += 1
         if end == position
