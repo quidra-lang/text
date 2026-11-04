@@ -29,8 +29,8 @@ int ordinal(Date date)
 Date | error from_ordinal(int index)
     if index < 0 or index >= days_before_year(10000)
         return error("date outside years 1 through 9999", code = "TEXT_DATE")
-    int lo := 1
-    int hi := 10000
+    lo := 1
+    hi := 10000
     while lo + 1 < hi
         middle := (lo + hi) / 2
         if days_before_year(middle) <= index
@@ -38,7 +38,7 @@ Date | error from_ordinal(int index)
         else
             hi = middle
     remaining := index - days_before_year(lo)
-    int month := 1
+    month := 1
     while remaining >= days_in_month(lo, month)
         remaining -= days_in_month(lo, month)
         month += 1

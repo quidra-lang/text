@@ -26,10 +26,10 @@ private string | error padding(string source, nat width, string fill)
     count := if width > source_width then width - source_width else 0
     return string.repeat(fill, count)
 
-string | error pad_start(extend string source, nat width, string fill := " ")
+string | error pad_start(extend string source, nat width, fill := " ")
     return (try padding(source, width, fill)) + source
 
-string | error pad_end(extend string source, nat width, string fill := " ")
+string | error pad_end(extend string source, nat width, fill := " ")
     return source + (try padding(source, width, fill))
 
 string | error translate(extend string source, string original, string replacement)
@@ -57,7 +57,7 @@ string | error translate(extend string source, string original, string replaceme
         none
             return none
 
-string[] ascii_words(string source, bool ignore_case := false)
+string[] ascii_words(string source, ignore_case := false)
     string[] words := []
     current := ""
     uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -92,7 +92,7 @@ string[] ascii_words(string source, bool ignore_case := false)
     return result.append((current, count))
 
 
-string | error base_string(extend int value, int base := 10, bool uppercase := false)
+string | error base_string(extend int value, base := 10, uppercase := false)
     if base < 2 or base > 36
         return error("base must be between 2 and 36", code = "TEXT_BASE")
     if value == 0

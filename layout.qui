@@ -37,7 +37,7 @@ string[] | error justify(string source, int width, extra_right := false)
             line = lines[index]
             line += string.repeat(" ", nat(width - len(line)))
         else
-            int letters := 0
+            letters := 0
             for word := words[]
                 letters += len(word)
             gaps := int(len(words)) - 1
