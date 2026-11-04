@@ -5,7 +5,7 @@
 ```quidra
 import text
 
-int[] values := [-12, 0, 34]
+values := [-12, 0, 34]
 println(text.join(values, " "))
 ```
 

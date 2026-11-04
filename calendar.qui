@@ -4,7 +4,7 @@ bool leap_year(int year)
 int days_in_month(int year, int month)
     if year < 1 or year > 9999 or month < 1 or month > 12
         return 0
-    int[] lengths := [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    lengths := [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     if month == 2 and leap_year(year)
         return 29
     return lengths[month - 1]
