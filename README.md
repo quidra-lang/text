@@ -6,7 +6,7 @@
 import text
 
 int[] values := [-12, 0, 34]
-print.line(text.join(values, " "))
+println(text.join(values, " "))
 ```
 
 `text.join<T>(T[] values, string separator) -> string` renders each element with ordinary `{value}` interpolation and inserts the separator only between elements. Strings remain unquoted; tuples use their usual tuple representation. Empty input returns `""`, one element has no separator, and an empty separator concatenates the rendered values. The function does not append a newline or mutate its input. Types that do not support ordinary interpolation are rejected by the compiler. Use native `string[].join(separator)` when the elements are already strings.
@@ -114,7 +114,7 @@ normalized := "Hello, 猫!".translate("H猫", "h犬")
 ```quidra
 today := text.calendar.Date(2024, 2, 28)
 later := text.calendar.add_days(today, 2)
-print.line(text.calendar.iso(later))
+println(text.calendar.iso(later))
 ```
 
 `calendar.Date` is validated on construction and contains `year`, `month`, `day`. The module uses the proleptic Gregorian calendar, years 1..9999, no time zones. `leap_year`, `days_in_month`, `ordinal` (0-based from 0001-01-01), `from_ordinal`, `add_days`, `days_between`, `weekday` (Monday=0), `iso`, `parse(YYYY-MM-DD)`, and `month_grid(year,month)` are available. Invalid calendar values and out-of-range day arithmetic return `TEXT_DATE`. `month_grid` produces a Sunday-first display with a header row. Civil dates are not monotonic `time.Instant` or elapsed durations.

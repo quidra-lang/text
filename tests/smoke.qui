@@ -1,50 +1,50 @@
 import text
 
-print.line(text.lower_ascii("HELLO, World!"))
-print.line(text.upper_ascii("hello, World!"))
+println(text.lower_ascii("HELLO, World!"))
+println(text.upper_ascii("hello, World!"))
 match "name=value=more".split_once("=")
     (string key, string value)
-        print.line("{key}:{value}")
+        println("{key}:{value}")
     none
-        print.line("missing")
+        println("missing")
 match "no delimiter".split_once("=")
     (string key, string value)
-        print.line("unexpected")
+        println("unexpected")
     none
-        print.line("no-match")
+        println("no-match")
 
 string[] words := text.ascii_words("Apple, banana APPLE!", ignore_case = true)
-print.line("{words.join("|")}")
+println("{words.join("|")}")
 
 string csv_input := "name,note{NL}Aki,{DQ}a,b{DQ}{NL}"
 rows := text.csv.parse(csv_input)
-print.line("{rows[1][0]}:{rows[1][1]}")
+println("{rows[1][0]}:{rows[1][1]}")
 
 parameters := text.url.query.parse("tag=C%2B%2B&tag=AI+ML&empty=&flag")
 match parameters.get("tag")
     string[] tags
-        print.line("{tags.join("|")}")
+        println("{tags.join("|")}")
     none
-        print.line("missing")
+        println("missing")
 match parameters.get("empty")
     string[] values
-        print.line("empty={len(values[0])}")
+        println("empty={len(values[0])}")
     none
-        print.line("missing")
+        println("missing")
 match text.csv.parse(DQ + "broken")
     string[][] unexpected
-        print.line("unexpected")
+        println("unexpected")
     error problem
-        print.line("csv-error")
+        println("csv-error")
 match text.url.query.parse("a=%ZZ")
     map<string, string[]> unexpected
-        print.line("unexpected")
+        println("unexpected")
     error problem
-        print.line("url-error")
+        println("url-error")
 
 extras := text.url.query.parse("?a=1&&a=2&")
 match extras.get("a")
     string[] values
-        print.line(extras.keys() == ["a"] and values == ["1", "2"])
+        println(extras.keys() == ["a"] and values == ["1", "2"])
     none
-        print.line(false)
+        println(false)
