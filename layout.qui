@@ -14,11 +14,11 @@ string[] | error wrap(string source, int width)
     for word := source.split(" ")[]
         if word == ""
             continue
-        if int(len(word)) > width
+        if len(word) > width
             return error("word exceeds layout width", code = "TEXT_LAYOUT")
         if current == ""
             current = word
-        elif int(len(current) + 1 + len(word)) <= width
+        elif len(current) + 1 + len(word) <= width
             current += " " + word
         else
             lines = lines.append(current)
@@ -35,17 +35,17 @@ string[] | error justify(string source, int width, extra_right := false)
         line := ""
         if index + 1 == len(lines) or len(words) == 1 or lines[index] == ""
             line = lines[index]
-            line += string.repeat(" ", nat(width - int(len(line))))
+            line += string.repeat(" ", nat(width - len(line)))
         else
             int letters := 0
             for word := words[]
-                letters += int(len(word))
+                letters += len(word)
             gaps := int(len(words)) - 1
             base := (width - letters) / gaps
             extra := (width - letters) % gaps
             for nat i < len(words)
                 if i > 0
-                    award_extra := if extra_right then int(i) > gaps - extra else int(i) <= extra
+                    award_extra := if extra_right then i > gaps - extra else i <= extra
                     blanks := base + (if award_extra then 1 else 0)
                     line += string.repeat(" ", nat(blanks))
                 line += words[i]
