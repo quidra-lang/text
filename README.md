@@ -13,7 +13,7 @@ println(text.join(values, " "))
 
 First-party text parsing and structured text formats for Quidra 0.6.x.
 
-Use [Core `84f1222`](https://github.com/quidra-lang/quidra/commit/84f122237795f1b6258a588ce740b377cbe6740d) or later for the numeric literal defaults and inferred default parameters used by this development version. The compatibility workflow pins that baseline.
+Use [Core `323790a`](https://github.com/quidra-lang/quidra/commit/323790a8a1618a8a3b23b46fcb5098042d1d4beb) or later for the numeric literal defaults, inferred default parameters and `for:` declarations used by this development version. The compatibility workflow pins that baseline.
 
 ## Installation
 
