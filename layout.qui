@@ -27,7 +27,7 @@ string[] | error wrap(string source, int width)
         lines = lines.append(current)
     return lines
 
-string[] | error justify(string source, int width, bool extra_right := false)
+string[] | error justify(string source, int width, extra_right := false)
     lines := try wrap(source, width)
     string[] result := []
     for nat index < len(lines)
