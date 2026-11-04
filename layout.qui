@@ -30,7 +30,7 @@ string[] | error wrap(string source, int width)
 string[] | error justify(string source, int width, extra_right := false)
     lines := try wrap(source, width)
     string[] result := []
-    for nat index < len(lines)
+    for: nat index < len(lines)
         words := lines[index].split(" ")
         line := ""
         if index + 1 == len(lines) or len(words) == 1 or lines[index] == ""
@@ -43,7 +43,7 @@ string[] | error justify(string source, int width, extra_right := false)
             gaps := int(len(words)) - 1
             base := (width - letters) / gaps
             extra := (width - letters) % gaps
-            for nat i < len(words)
+            for: nat i < len(words)
                 if i > 0
                     award_extra := if extra_right then i > gaps - extra else i <= extra
                     blanks := base + (if award_extra then 1 else 0)

@@ -75,7 +75,7 @@ class Cursor(const string[] tokens)
     bool .accept_sequence(string[] sequence)
         if position + len(sequence) > len(tokens)
             return false
-        for nat i < len(sequence)
+        for: nat i < len(sequence)
             if tokens[position + i] != sequence[i]
                 return false
         position += len(sequence)

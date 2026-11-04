@@ -4,7 +4,7 @@ string[] | error words(string source)
     digits := "0123456789"
     string[] result := []
     current := ""
-    for nat i < len(source)
+    for: nat i < len(source)
         character := source[i]
         if character == "_" or character == "-"
             if current != ""
@@ -47,6 +47,6 @@ string | error camel(string source)
     if len(parts) == 0
         return ""
     result := parts[0]
-    for 1 <= nat i < len(parts)
+    for: 1 <= nat i < len(parts)
         result += parts[i][0].upper_ascii() + parts[i][1:]
     return result

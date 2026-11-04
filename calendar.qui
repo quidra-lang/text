@@ -22,7 +22,7 @@ int days_before_year(int year)
 
 int ordinal(Date date)
     value := days_before_year(date.year) + date.day - 1
-    for 1 <= int month < date.month
+    for: 1 <= int month < date.month
         value += days_in_month(date.year, month)
     return value
 
@@ -62,7 +62,7 @@ Date | error parse(string source)
         return error("expected YYYY-MM-DD", code = "TEXT_DATE")
     digits := "0123456789"
     for part := parts[]
-        for nat i < len(part)
+        for: nat i < len(part)
             if not digits.contains(part[i])
                 return error("expected decimal YYYY-MM-DD", code = "TEXT_DATE")
     year := try int.parse(parts[0])
@@ -77,7 +77,7 @@ string[] | error month_grid(int year, int month)
     rows := ["Su Mo Tu We Th Fr Sa"]
     line := string.repeat(" ", nat(start * 3))
     column := start
-    for 1 <= int day <= days
+    for: 1 <= int day <= days
         if day > 1 and column > 0
             line += " "
         line += "{day:int=2}"

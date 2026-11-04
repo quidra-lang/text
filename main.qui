@@ -13,7 +13,7 @@ string upper_ascii(string source)
 
 string join<T>(T[] values, string separator)
     result := ""
-    for nat i < len(values)
+    for: nat i < len(values)
         if i > 0
             result += separator
         result += "{values[i]}"
@@ -36,10 +36,10 @@ string | error translate(extend string source, string original, string replaceme
     if len(original) != len(replacement)
         return error("translation alphabets must have equal Unicode code-point lengths", code = "TEXT_TRANSLATE")
     map<string, string> mapping
-    for nat i < len(original)
+    for: nat i < len(original)
         .mapping.set(original[i], replacement[i])
     result := ""
-    for nat i < len(source)
+    for: nat i < len(source)
         character := source[i]
         match mapping.get(character)
             string mapped
@@ -62,7 +62,7 @@ string[] ascii_words(string source, ignore_case := false)
     current := ""
     uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     lowercase := "abcdefghijklmnopqrstuvwxyz"
-    for nat index < len(source)
+    for: nat index < len(source)
         character := source[index]
         upper := uppercase.contains(character)
         if upper and ignore_case
@@ -82,7 +82,7 @@ string[] ascii_words(string source, ignore_case := false)
         return result
     current := source[0]
     nat count := 1
-    for 1 <= nat i < len(source)
+    for: 1 <= nat i < len(source)
         if source[i] == current
             count += 1
         else
@@ -140,6 +140,6 @@ class Cursor(const string source)
 
 string[] characters(extend string source)
     string[] result := []
-    for nat i < len(source)
+    for: nat i < len(source)
         result = result.append(source[i])
     return result
