@@ -9,7 +9,7 @@ println("kebab={text.identifier.kebab("lastLoginDate")}")
 
 groups := text.runs("AAABAA")
 println("runs={len(groups)}")
-(string first, nat count) := groups[0]
+(first, count) := groups[0]
 println("first-run={first}:{count}")
 
 initial := text.calendar.Date(2024, 2, 28)
