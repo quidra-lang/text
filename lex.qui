@@ -81,7 +81,7 @@ class Cursor(const string[] tokens)
         position += sequence.len()
         return true
 
-    string[] .take_while(func<bool>(string) predicate)
+    string[] .take_while(func<bool(string)> predicate)
         string[] values := []
         while position < tokens.len() and predicate(tokens[position])
             values = values.append(tokens[position])

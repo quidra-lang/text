@@ -13,7 +13,7 @@ println(text.join(values, " "))
 
 First-party text parsing and structured text formats for Quidra 0.6.x.
 
-Use [Core `0d0150b`](https://github.com/quidra-lang/quidra/commit/0d0150b6aeaeecf26f471cbbc0fce35f2876782e) or later for `.len()` and checked conversion calls such as `int(text)`. The compatibility workflow pins that baseline.
+Use [Core `29b40d4`](https://github.com/quidra-lang/quidra/commit/29b40d4f30b5b15f8376f7d67e4ef23429425fa0) or later for `func<R(P...)>` callback types, `.len()`, and checked conversion calls such as `int(text)`. The compatibility workflow pins that baseline.
 
 ## Installation
 
@@ -135,7 +135,7 @@ cursor := text.lex.Cursor(tokens)
 .cursor.expect("x12")
 ```
 
-`lex.tokenize` recognizes ASCII identifiers, integer digits, whitespace, quoted tokens (without escape support), punctuation, and the pairs `== != <= >= && ||`. It preserves token spellings and returns `TEXT_LEX` on invalid characters or unterminated quotes. `lex.Cursor` provides `peek()`, mutating `.take()`, `.accept(token)`, `.expect(token)`, `offset()` and `done()` for recursive-descent parsers. Unexpected expected tokens return `TEXT_PARSE`. `Cursor` additionally supports mutating `.accept_any(options)`, `.accept_sequence(sequence)`, and `.take_while(predicate)` for token-level choice, sequence and repetition. The first two are transactional: when nothing matches, the cursor position is unchanged. `take_while` accepts a capture-free pure `func<bool>(string)` and consumes the maximal matching prefix. This is a token-level parser-combinator substrate, not a complete typed grammar framework.
+`lex.tokenize` recognizes ASCII identifiers, integer digits, whitespace, quoted tokens (without escape support), punctuation, and the pairs `== != <= >= && ||`. It preserves token spellings and returns `TEXT_LEX` on invalid characters or unterminated quotes. `lex.Cursor` provides `peek()`, mutating `.take()`, `.accept(token)`, `.expect(token)`, `offset()` and `done()` for recursive-descent parsers. Unexpected expected tokens return `TEXT_PARSE`. `Cursor` additionally supports mutating `.accept_any(options)`, `.accept_sequence(sequence)`, and `.take_while(predicate)` for token-level choice, sequence and repetition. The first two are transactional: when nothing matches, the cursor position is unchanged. `take_while` accepts a capture-free pure `func<bool(string)>` and consumes the maximal matching prefix. This is a token-level parser-combinator substrate, not a complete typed grammar framework.
 
 `Cursor.tokens` is an immutable value snapshot; consuming tokens changes only the private position. Replacing or editing that array through the cursor is rejected, preserving the relationship between `done`, `offset`, `peek` and `take`.
 
