@@ -58,16 +58,16 @@ string iso(Date date)
 
 Date | error parse(string source)
     parts := source.split("-")
-    if len(parts) != 3 or len(parts[0]) != 4 or len(parts[1]) != 2 or len(parts[2]) != 2
+    if parts.len() != 3 or parts[0].len() != 4 or parts[1].len() != 2 or parts[2].len() != 2
         return error("expected YYYY-MM-DD", code = "TEXT_DATE")
     digits := "0123456789"
     for part := parts[]
-        for: nat i < len(part)
+        for: nat i < part.len()
             if not digits.contains(part[i])
                 return error("expected decimal YYYY-MM-DD", code = "TEXT_DATE")
-    year := try int.parse(parts[0])
-    month := try int.parse(parts[1])
-    day := try int.parse(parts[2])
+    year := try int(parts[0])
+    month := try int(parts[1])
+    day := try int(parts[2])
     return Date(year, month, day)
 
 string[] | error month_grid(int year, int month)

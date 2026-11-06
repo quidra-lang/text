@@ -4,7 +4,7 @@ string[] | error tokenize(string source)
     punctuation := "+-*/%=!<>&|()[]{{}};:,.?"
     string[] result := []
     nat i := 0
-    while i < len(source)
+    while i < source.len()
         ch := source[i]
         if ch == " " or ch == HT or ch == NL or ch == CR
             i += 1
@@ -12,22 +12,22 @@ string[] | error tokenize(string source)
         start := i
         if letters.contains(ch)
             i += 1
-            while i < len(source) and (letters.contains(source[i]) or digits.contains(source[i]))
+            while i < source.len() and (letters.contains(source[i]) or digits.contains(source[i]))
                 i += 1
         elif digits.contains(ch)
             i += 1
-            while i < len(source) and digits.contains(source[i])
+            while i < source.len() and digits.contains(source[i])
                 i += 1
         elif ch == DQ
             i += 1
-            while i < len(source) and source[i] != DQ
+            while i < source.len() and source[i] != DQ
                 i += 1
-            if i >= len(source)
+            if i >= source.len()
                 return error("unterminated quoted token", code = "TEXT_LEX")
             i += 1
         elif punctuation.contains(ch)
             i += 1
-            if i < len(source)
+            if i < source.len()
                 pair := ch + source[i]
                 if pair == "==" or pair == "!=" or pair == "<=" or pair == ">=" or pair == "&&" or pair == "||"
                     i += 1
@@ -40,31 +40,31 @@ class Cursor(const string[] tokens)
     private nat position := 0
 
     bool done()
-        return position == len(tokens)
+        return position == tokens.len()
 
     nat offset()
         return position
 
     string | none peek()
-        if position >= len(tokens)
+        if position >= tokens.len()
             return none
         return tokens[position]
 
     string | none .take()
-        if position >= len(tokens)
+        if position >= tokens.len()
             return none
         current := tokens[position]
         position += 1
         return current
 
     bool .accept(string token)
-        if position < len(tokens) and tokens[position] == token
+        if position < tokens.len() and tokens[position] == token
             position += 1
             return true
         return false
 
     bool .accept_any(string[] options)
-        if position >= len(tokens)
+        if position >= tokens.len()
             return false
         for option := options[]
             if tokens[position] == option
@@ -73,17 +73,17 @@ class Cursor(const string[] tokens)
         return false
 
     bool .accept_sequence(string[] sequence)
-        if position + len(sequence) > len(tokens)
+        if position + sequence.len() > tokens.len()
             return false
-        for: nat i < len(sequence)
+        for: nat i < sequence.len()
             if tokens[position + i] != sequence[i]
                 return false
-        position += len(sequence)
+        position += sequence.len()
         return true
 
     string[] .take_while(func<bool>(string) predicate)
         string[] values := []
-        while position < len(tokens) and predicate(tokens[position])
+        while position < tokens.len() and predicate(tokens[position])
             values = values.append(tokens[position])
             position += 1
         return values

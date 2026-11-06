@@ -13,7 +13,7 @@ println(text.join(values, " "))
 
 First-party text parsing and structured text formats for Quidra 0.6.x.
 
-Use [Core `b5dd7b0`](https://github.com/quidra-lang/quidra/commit/b5dd7b0bc7a08346321f0fe5170793486b50391b) or later for compact numeric interpolation (`:04.`, `:02.` and `:2.`), numeric literal defaults, inferred default parameters and `for:` declarations used by this development version. The compatibility workflow pins that baseline.
+Use [Core `0d0150b`](https://github.com/quidra-lang/quidra/commit/0d0150b6aeaeecf26f471cbbc0fce35f2876782e) or later for `.len()` and checked conversion calls such as `int(text)`. The compatibility workflow pins that baseline.
 
 ## Installation
 
@@ -141,5 +141,5 @@ cursor := text.lex.Cursor(tokens)
 
 ## Integer radix formatting
 
-`text.base_string(extend int value, int base := 10, bool uppercase := false) -> string | error` converts arbitrary-precision signed integers in bases 2..36. It is also usable as `value.base_string(base=16)` when Text is imported. Negative integers have a leading minus sign, zero is `0`, and `uppercase=true` uses A-Z for digits 10..35. Invalid bases return `TEXT_BASE`. Core also provides `value.string(base = 16, uppercase = true)` for integer values, with compile-time literal formatting arguments. Text's `base_string` instead accepts a run-time integer `base` (2..36) and an `int` receiver, returning a checked `TEXT_BASE` error for invalid bases. Other integer widths convert to `int` when bound to `base_string`'s receiver, following Core's numeric argument-conversion rules. Neither API adds prefixes.
+`text.base_string(extend int value, int base := 10, bool uppercase := false) -> string | error` converts arbitrary-precision signed integers in bases 2..36. It is also usable as `value.base_string(base=16)` when Text is imported. Negative integers have a leading minus sign, zero is `0`, and `uppercase=true` uses A-Z for digits 10..35. Invalid bases return `TEXT_BASE`. Core provides `value.b16` for lowercase hexadecimal and `value.B16` for uppercase hexadecimal. For any fixed base from 2 to 36, use `.bN` or `.BN`. Text's `base_string` instead accepts a run-time integer `base` (2..36) and an `int` receiver, returning a checked `TEXT_BASE` error for invalid bases. Other integer widths convert to `int` when bound to `base_string`'s receiver, following Core's numeric argument-conversion rules. Neither API adds prefixes.
 

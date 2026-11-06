@@ -8,7 +8,7 @@ println("pascal={text.identifier.pascal("first_second")}")
 println("kebab={text.identifier.kebab("lastLoginDate")}")
 
 groups := text.runs("AAABAA")
-println("runs={len(groups)}")
+println("runs={groups.len()}")
 (first, count) := groups[0]
 println("first-run={first}:{count}")
 
@@ -19,7 +19,7 @@ println("weekday={text.calendar.weekday(advanced)}")
 println("between={text.calendar.days_between(initial, advanced)}")
 grid := text.calendar.month_grid(2024, 2)
 println("grid-header={grid[0]}")
-println("grid-last={grid[len(grid) - 1]}")
+println("grid-last={grid[grid.len() - 1]}")
 match text.calendar.parse("2026-02-30")
     text.calendar.Date invalid
         println("unexpected")
@@ -101,4 +101,4 @@ match .invalid_prefix.take_nat()
     error failure
         println("cursor-invalid={failure.code}:{invalid_prefix.offset()}")
 string[] characters := text.characters("a猫")
-println("characters={characters.join("|")}:{len(text.characters(""))}")
+println("characters={characters.join("|")}:{text.characters("").len()}")

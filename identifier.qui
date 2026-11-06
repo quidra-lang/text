@@ -4,7 +4,7 @@ string[] | error words(string source)
     digits := "0123456789"
     string[] result := []
     current := ""
-    for: nat i < len(source)
+    for: nat i < source.len()
         character := source[i]
         if character == "_" or character == "-"
             if current != ""
@@ -17,7 +17,7 @@ string[] | error words(string source)
         if uppercase and current != ""
             previous := source[i - 1]
             boundary := lower.contains(previous) or digits.contains(previous)
-            if not boundary and i + 1 < len(source)
+            if not boundary and i + 1 < source.len()
                 boundary = upper.contains(previous) and lower.contains(source[i + 1])
             if boundary
                 result = result.append(current)
@@ -44,9 +44,9 @@ string | error pascal(string source)
 
 string | error camel(string source)
     parts := try words(source)
-    if len(parts) == 0
+    if parts.len() == 0
         return ""
     result := parts[0]
-    for: 1 <= nat i < len(parts)
+    for: 1 <= nat i < parts.len()
         result += parts[i][0].upper_ascii() + parts[i][1:]
     return result
