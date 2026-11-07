@@ -14,36 +14,36 @@ string[] | error wrap(string source, int width)
     for word := source.split(" ")[]
         if word == ""
             continue
-        if word.len() > width
+        if #word > width
             return error("word exceeds layout width", code = "TEXT_LAYOUT")
         if current == ""
             current = word
-        elif current.len() + 1 + word.len() <= width
+        elif #current + 1 + #word <= width
             current += " " + word
         else
             lines = lines.append(current)
             current = word
-    if current != "" or lines.len() == 0
+    if current != "" or #lines == 0
         lines = lines.append(current)
     return lines
 
 string[] | error justify(string source, int width, extra_right := false)
     lines := try wrap(source, width)
     string[] result := []
-    for: nat index < lines.len()
+    for: nat index < #lines
         words := lines[index].split(" ")
         line := ""
-        if index + 1 == lines.len() or words.len() == 1 or lines[index] == ""
+        if index + 1 == #lines or #words == 1 or lines[index] == ""
             line = lines[index]
-            line += string.repeat(" ", nat(width - line.len()))
+            line += string.repeat(" ", nat(width - #line))
         else
             letters := 0
             for word := words[]
-                letters += word.len()
-            gaps := int(words.len()) - 1
+                letters += #word
+            gaps := int(#words) - 1
             base := (width - letters) / gaps
             extra := (width - letters) % gaps
-            for: nat i < words.len()
+            for: nat i < #words
                 if i > 0
                     award_extra := if extra_right then i > gaps - extra else i <= extra
                     blanks := base + (if award_extra then 1 else 0)

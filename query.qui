@@ -11,12 +11,12 @@ string | error decode_form_component(string source)
     raw := nat8[](source.utf8())
     nat8[] decoded := []
     nat index := 0
-    while index < raw.len()
+    while index < #raw
         byte := int(raw[index])
         if byte == 43
             decoded = decoded.append(nat8(32))
         elif byte == 37
-            if index + 2 >= raw.len()
+            if index + 2 >= #raw
                 return error("incomplete percent escape", code = "TEXT_URL_ESCAPE")
             hi := try hex_value(int(raw[index + 1]))
             lo := try hex_value(int(raw[index + 2]))

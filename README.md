@@ -1,5 +1,7 @@
 # Quidra Text
 
+On `develop`, `#value` is the ordinary zero-argument `value.len()` call. It also works automatically for custom classes and visible extensions that provide `len`; return types, errors and access/effect checks are unchanged. Standard array, string and binary lengths remain `nat`.
+
 ## Joining printable values
 
 ```quidra
@@ -13,7 +15,7 @@ println(text.join(values, " "))
 
 First-party text parsing and structured text formats for Quidra 0.6.x.
 
-Use [Core `29b40d4`](https://github.com/quidra-lang/quidra/commit/29b40d4f30b5b15f8376f7d67e4ef23429425fa0) or later for `func<R(P...)>` callback types, `.len()`, and checked conversion calls such as `int(text)`. The compatibility workflow pins that baseline.
+Use [Core `43328df`](https://github.com/quidra-lang/quidra/commit/43328df98bfb17df13b27b852068263a0453c687) or later for `#value`, `func<R(P...)>` callback types, `.len()`, and checked conversion calls such as `int(text)`. The compatibility workflow pins that baseline.
 
 ## Installation
 

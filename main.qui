@@ -13,16 +13,16 @@ string upper_ascii(string source)
 
 string join<T>(T[] values, string separator)
     result := ""
-    for: nat i < values.len()
+    for: nat i < #values
         if i > 0
             result += separator
         result += "{values[i]}"
     return result
 
 private string | error padding(string source, nat width, string fill)
-    if fill.len() != 1
+    if #fill != 1
         return error("padding fill must contain exactly one Unicode code point", code = "TEXT_PADDING")
-    source_width := source.len()
+    source_width := #source
     count := if width > source_width then width - source_width else 0
     return string.repeat(fill, count)
 
@@ -33,13 +33,13 @@ string | error pad_end(extend string source, nat width, fill := " ")
     return source + (try padding(source, width, fill))
 
 string | error translate(extend string source, string original, string replacement)
-    if original.len() != replacement.len()
+    if #original != #replacement
         return error("translation alphabets must have equal Unicode code-point lengths", code = "TEXT_TRANSLATE")
     map<string, string> mapping
-    for: nat i < original.len()
+    for: nat i < #original
         .mapping.set(original[i], replacement[i])
     result := ""
-    for: nat i < source.len()
+    for: nat i < #source
         character := source[i]
         match mapping.get(character)
             string mapped
@@ -53,7 +53,7 @@ string | error translate(extend string source, string original, string replaceme
         error("split_once separator cannot be empty", code = "TEXT_SPLIT")
     match source.find(separator)
         nat position
-            return (source[:<position], source[(position + separator.len()):])
+            return (source[:<position], source[(position + #separator):])
         none
             return none
 
@@ -62,7 +62,7 @@ string[] ascii_words(string source, ignore_case := false)
     current := ""
     uppercase := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     lowercase := "abcdefghijklmnopqrstuvwxyz"
-    for: nat index < source.len()
+    for: nat index < #source
         character := source[index]
         upper := uppercase.contains(character)
         if upper and ignore_case
@@ -78,11 +78,11 @@ string[] ascii_words(string source, ignore_case := false)
 
 (string, nat)[] runs(string source)
     (string, nat)[] result := []
-    if source.len() == 0
+    if #source == 0
         return result
     current := source[0]
     nat count := 1
-    for: 1 <= nat i < source.len()
+    for: 1 <= nat i < #source
         if source[i] == current
             count += 1
         else
@@ -116,7 +116,7 @@ class Cursor(const string source)
         return position
 
     bool done()
-        return position == source.len()
+        return position == #source
 
     string | error .take_char()
         if done()
@@ -127,7 +127,7 @@ class Cursor(const string source)
 
     nat | error .take_nat()
         end := position
-        while end < source.len() and "0123456789".contains(source[end])
+        while end < #source and "0123456789".contains(source[end])
             end += 1
         if end == position
             return error("expected an ASCII digit", code = "TEXT_CURSOR")
@@ -140,6 +140,6 @@ class Cursor(const string source)
 
 string[] characters(extend string source)
     string[] result := []
-    for: nat i < source.len()
+    for: nat i < #source
         result = result.append(source[i])
     return result

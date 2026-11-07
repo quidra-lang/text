@@ -28,7 +28,7 @@ match parameters.get("tag")
         println("missing")
 match parameters.get("empty")
     string[] values
-        println("empty={values[0].len()}")
+        println("empty={#values[0]}")
     none
         println("missing")
 match text.csv.parse(DQ + "broken")
